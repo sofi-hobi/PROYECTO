@@ -145,6 +145,8 @@ public class pantallainicial1 extends JPanel {
         return centerPanel;
     }
 
+    
+
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -197,7 +199,6 @@ public class pantallainicial1 extends JPanel {
                 button.setBackground(baseColor);
             }
         });
-
         return button;
     }
 
@@ -230,12 +231,11 @@ public class pantallainicial1 extends JPanel {
     }
 
     private void jButton2ActionPerformed(ActionEvent evt) {
-        // Implementar lógica del menú de comandos
-        JOptionPane.showMessageDialog(this, 
-            "Menú de comandos próximamente disponible", 
-            "Información", 
-            JOptionPane.INFORMATION_MESSAGE);
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        MenuComando menu = new MenuComando(parentFrame);
+        menu.setVisible(true);
     }
+
 
     public void mostrarNumero(String numero) {
         if (numero != null && !numero.isEmpty()) {
