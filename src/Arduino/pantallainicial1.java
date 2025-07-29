@@ -22,8 +22,8 @@ public class pantallainicial1 extends JPanel {
 
     // Colores del tema
     private final Color PRIMARY_COLOR = new Color(89, 187, 206);      // Azul elegante
-    private final Color SECONDARY_COLOR = new Color(52, 152, 219);    // Azul más claro
-    private final Color BACKGROUND_COLOR = new Color(236, 240, 241);  // Gris muy claro
+    private final Color SECONDARY_COLOR = new Color(43, 132, 192);    // Azul más claro
+    private final Color BACKGROUND_COLOR = new Color(215, 255, 255);  // Gris muy claro
     private final Color TEXT_COLOR = new Color(44, 62, 80);           // Gris oscuro
     private final Color BUTTON_HOVER = new Color(30, 115, 165);       // Azul más oscuro
     private final Color SUCCESS_COLOR = new Color(150, 203, 114);       // Verde
@@ -64,7 +64,7 @@ public class pantallainicial1 extends JPanel {
     // Título centrado
     titleLabel = new JLabel("Escuela Politécnica Nacional", SwingConstants.CENTER);
     titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
-    titleLabel.setForeground(PRIMARY_COLOR);
+    titleLabel.setForeground(SECONDARY_COLOR);
     panelTituloLogo.add(titleLabel, BorderLayout.CENTER);
 
     // Logo a la derecha

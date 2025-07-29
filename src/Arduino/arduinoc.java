@@ -3,6 +3,7 @@ import java.util.Scanner;
 import com.fazecast.jSerialComm.SerialPort;
 import java.io.InputStream;
 import Arduino.pantallainicial1;
+import Arduino.ArduinoDataDAO; //Agregado para la database
 public class arduinoc {
 
     public static void main(String[] args) {
@@ -144,8 +145,10 @@ public class arduinoc {
             if (!linea.isEmpty()) {
                 System.out.println("Código recibido: " + linea);
 
+                ArduinoDataDAO.insertCodigo(linea); //Agregado para la database
+
                 switch (linea) {
-                    case " 0x7":
+                    case "0x7":
                         System.out.println(" Acción: Ejecutar botón desde Arduino");
                         javax.swing.SwingUtilities.invokeLater(() -> {
                             pantalla.botonInicio.doClick();  // Simula el clic
