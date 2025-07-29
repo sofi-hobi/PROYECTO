@@ -1,7 +1,7 @@
 package Arduino;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class MenuComando extends JDialog {
 
@@ -41,13 +41,13 @@ public class MenuComando extends JDialog {
         });
 
         // Botón: Simulador de Control
-        JButton simuladorBtn = crearBotonEstilizado("Simulador de Control", verdeControl, textoOscuro);
-        simuladorBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,
-                    "Simulador de control abierto (módulo en desarrollo).",
-                    "Simulador",
-                    JOptionPane.INFORMATION_MESSAGE);
-        });
+        // JButton simuladorBtn = crearBotonEstilizado("Simulador de Control", verdeControl, textoOscuro);
+        // simuladorBtn.addActionListener(e -> {
+        //     JOptionPane.showMessageDialog(this,
+        //             "Simulador de control abierto (módulo en desarrollo).",
+        //             "Simulador",
+        //             JOptionPane.INFORMATION_MESSAGE);
+        // });
 
         // Botón: Cerrar
         JButton cerrarBtn = crearBotonEstilizado("Cerrar", rojoCerrar, Color.WHITE);
@@ -56,8 +56,8 @@ public class MenuComando extends JDialog {
         // Agregar botones al panel
         commandPanel.add(historialBtn);
         commandPanel.add(Box.createRigidArea(new Dimension(0, 12)));
-        commandPanel.add(simuladorBtn);
-        commandPanel.add(Box.createRigidArea(new Dimension(0, 12)));
+       // commandPanel.add(simuladorBtn);
+       // commandPanel.add(Box.createRigidArea(new Dimension(0, 12)));
         commandPanel.add(cerrarBtn);
 
         add(commandPanel, BorderLayout.CENTER);

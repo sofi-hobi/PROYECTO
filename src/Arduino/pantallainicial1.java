@@ -2,7 +2,6 @@ package Arduino;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 public class pantallainicial1 extends JPanel {
     Pantalla2 frame2 = new Pantalla2();
+    
     public JButton botonInicio;
     public JButton jButton1;
     public JButton jButton2;
@@ -50,6 +50,9 @@ public class pantallainicial1 extends JPanel {
         JPanel bottomPanel = createBottomPanel();
         add(bottomPanel, BorderLayout.SOUTH);
     }
+     public Pantalla2 getPantalla2() {
+    return frame2;
+}
 
     private JPanel createTopPanel() {
     JPanel topPanel = new JPanel();
@@ -225,7 +228,8 @@ public class pantallainicial1 extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.pack();
         frame.setVisible(true);
-        
+        frame.getContentPane().add(frame2);
+
         // Opcional: cerrar la ventana actual
         SwingUtilities.getWindowAncestor(this).dispose();
     }

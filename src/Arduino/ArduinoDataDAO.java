@@ -13,15 +13,15 @@ public class ArduinoDataDAO {
      * Inserta un nuevo registro de código de Arduino en la base de datos.
      * @param codigo El String del código recibido del Arduino (ej. "0x7").
      */
-    public static void insertCodigo(String codigo) {
+    public static void insertCodigo(String linea) {
         String sql = "INSERT INTO registros_arduino(codigo_arduino) VALUES(?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, codigo); // Establece el String del código en el primer parámetro
+            pstmt.setString(1, linea); // Establece el String del código en el primer parámetro
             pstmt.executeUpdate();
-            System.out.println("✔ Código '" + codigo + "' guardado en la BD.");
+            System.out.println(" Código '" + linea + "' guardado en la BD.");
 
         } catch (SQLException e) {
             System.err.println("❌ Error al guardar el código en la base de datos: " + e.getMessage());

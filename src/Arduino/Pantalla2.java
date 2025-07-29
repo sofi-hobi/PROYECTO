@@ -1,23 +1,19 @@
 package Arduino;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-public class Pantalla2 extends JPanel implements KeyListener {
+public class Pantalla2 extends JPanel {
     private JLabel titleLabel;
     private JLabel instructionLabel;
-    private JLabel pressedKeyLabel;
     private JLabel statusLabel;
+    private JLabel displayLabel;
     private JButton backButton;
-    private JPanel centerPanel;
     private JPanel keyDisplayPanel;
 
-    // Colores del tema (consistentes con pantallainicial1)
+    // Colores del tema
     private final Color PRIMARY_COLOR = new Color(41, 128, 185);
     private final Color SECONDARY_COLOR = new Color(52, 152, 219);
     private final Color BACKGROUND_COLOR = new Color(236, 240, 241);
@@ -27,11 +23,7 @@ public class Pantalla2 extends JPanel implements KeyListener {
     private final Color CARD_COLOR = Color.WHITE;
 
     public Pantalla2() {
-        this.initComponents();
-        // Hacer el panel focusable para recibir eventos de teclado
-        this.setFocusable(true);
-        this.addKeyListener(this);
-        this.requestFocusInWindow();
+        initComponents();
     }
 
     private void initComponents() {
@@ -39,39 +31,22 @@ public class Pantalla2 extends JPanel implements KeyListener {
         setBackground(BACKGROUND_COLOR);
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        // Panel superior con título
-        JPanel topPanel = createTopPanel();
-        add(topPanel, BorderLayout.NORTH);
-
-        // Panel central con instrucciones y display
-        centerPanel = createCenterPanel();
-        add(centerPanel, BorderLayout.CENTER);
-
-        // Panel inferior con botón de regreso
-        JPanel bottomPanel = createBottomPanel();
-        add(bottomPanel, BorderLayout.SOUTH);
-
-        // Asegurar que el panel reciba el foco
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            @Override
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                requestFocusInWindow();
-            }
-        });
+        add(createTopPanel(), BorderLayout.NORTH);
+        add(createCenterPanel(), BorderLayout.CENTER);
+        add(createBottomPanel(), BorderLayout.SOUTH);
     }
 
     private JPanel createTopPanel() {
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(BACKGROUND_COLOR);
-        topPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(BACKGROUND_COLOR);
+        panel.setBorder(new EmptyBorder(0, 0, 30, 0));
 
-        // Título principal
-        titleLabel = new JLabel("sDetector de Teclas", SwingConstants.CENTER);
+        titleLabel = new JLabel("Detector desde Arduino", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
         titleLabel.setForeground(PRIMARY_COLOR);
-        topPanel.add(titleLabel, BorderLayout.CENTER);
 
-        return topPanel;
+        panel.add(titleLabel, BorderLayout.CENTER);
+        return panel;
     }
 
     private JPanel createCenterPanel() {
@@ -79,90 +54,39 @@ public class Pantalla2 extends JPanel implements KeyListener {
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(BACKGROUND_COLOR);
 
-        // Panel de instrucciones
-        JPanel instructionPanel = createInstructionPanel();
-        centerPanel.add(instructionPanel);
-
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 30)));
-
-        // Panel de visualización de teclas
-        keyDisplayPanel = createKeyDisplayPanel();
-        centerPanel.add(keyDisplayPanel);
-
-        centerPanel.add(Box.createVerticalGlue());
-
-        return centerPanel;
-    }
-
-    private JPanel createInstructionPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(CARD_COLOR);
-        panel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
-            new EmptyBorder(25, 30, 25, 30)
-        ));
-
-        // Icono de instrucción
-        JLabel iconLabel = new JLabel("⌨", SwingConstants.CENTER);
-        iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 48));
-        iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(iconLabel);
-
-        panel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        // Texto de instrucción principal
-        instructionLabel = new JLabel("Presiona cualquier tecla", SwingConstants.CENTER);
+        instructionLabel = new JLabel("Esperando señal IR...", SwingConstants.CENTER);
         instructionLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         instructionLabel.setForeground(TEXT_COLOR);
         instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(instructionLabel);
 
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        centerPanel.add(instructionLabel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 30)));
 
-        // Texto de instrucción secundaria
-        JLabel subInstructionLabel = new JLabel("El sistema detectará automáticamente tu entrada", SwingConstants.CENTER);
-        subInstructionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        subInstructionLabel.setForeground(new Color(127, 140, 141));
-        subInstructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(subInstructionLabel);
-
-        return panel;
-    }
-
-    private JPanel createKeyDisplayPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(BACKGROUND_COLOR);
-
-        // Panel para mostrar la tecla presionada
-        JPanel keyPanel = new JPanel(new BorderLayout());
-        keyPanel.setBackground(ACCENT_COLOR);
-        keyPanel.setBorder(BorderFactory.createCompoundBorder(
+        keyDisplayPanel = new JPanel(new BorderLayout());
+        keyDisplayPanel.setBackground(ACCENT_COLOR);
+        keyDisplayPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(ACCENT_COLOR.darker(), 2),
             new EmptyBorder(20, 20, 20, 20)
         ));
-        keyPanel.setMaximumSize(new Dimension(300, 100));
+        keyDisplayPanel.setMaximumSize(new Dimension(300, 100));
+        keyDisplayPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        pressedKeyLabel = new JLabel("Esperando entrada...", SwingConstants.CENTER);
-        pressedKeyLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        pressedKeyLabel.setForeground(Color.WHITE);
-        keyPanel.add(pressedKeyLabel, BorderLayout.CENTER);
+        displayLabel = new JLabel("⏳ Aún no se ha detectado nada", SwingConstants.CENTER);
+        displayLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        displayLabel.setForeground(Color.WHITE);
+        keyDisplayPanel.add(displayLabel, BorderLayout.CENTER);
 
-        panel.add(Box.createVerticalGlue());
-        panel.add(keyPanel);
-        panel.add(Box.createRigidArea(new Dimension(0, 15)));
-
-        // Estado del sistema
-        statusLabel = new JLabel("Sistema activo - Listo para detectar", SwingConstants.CENTER);
+        statusLabel = new JLabel("Sistema activo - Listo para recibir señales", SwingConstants.CENTER);
         statusLabel.setFont(new Font("Segoe UI", Font.ITALIC, 12));
         statusLabel.setForeground(SUCCESS_COLOR);
         statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(statusLabel);
 
-        panel.add(Box.createVerticalGlue());
+        centerPanel.add(keyDisplayPanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+        centerPanel.add(statusLabel);
+        centerPanel.add(Box.createVerticalGlue());
 
-        return panel;
+        return centerPanel;
     }
 
     private JPanel createBottomPanel() {
@@ -170,14 +94,20 @@ public class Pantalla2 extends JPanel implements KeyListener {
         bottomPanel.setBackground(BACKGROUND_COLOR);
         bottomPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
-        // Botón para regresar
         backButton = createStyledButton("🔙 Regresar al Menú Principal");
-        backButton.addActionListener(this::backButtonActionPerformed);
+        backButton.addActionListener(evt -> {
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window != null) {
+                window.dispose();
+            }
+        });
         bottomPanel.add(backButton);
-
         return bottomPanel;
     }
-
+    public JButton getBackButton() {
+    return backButton;
+}
+    
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -188,16 +118,15 @@ public class Pantalla2 extends JPanel implements KeyListener {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setPreferredSize(new Dimension(250, 45));
 
-        // Efectos hover
         Color hoverColor = PRIMARY_COLOR.darker();
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
+        button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(MouseEvent evt) {
                 button.setBackground(hoverColor);
             }
 
             @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            public void mouseExited(MouseEvent evt) {
                 button.setBackground(PRIMARY_COLOR);
             }
         });
@@ -205,69 +134,21 @@ public class Pantalla2 extends JPanel implements KeyListener {
         return button;
     }
 
-    private void backButtonActionPerformed(ActionEvent evt) {
-        // Cerrar ventana actual y volver al menú principal
-        Window window = SwingUtilities.getWindowAncestor(this);
-        if (window != null) {
-            window.dispose();
-        }
-    }
+    // 👉 Método que puedes invocar desde Arduino para mostrar el número
+    public void mostrarNumero(String numero) {
+        displayLabel.setText("" + numero + " aplastado");
 
-    // Implementación de KeyListener
-    @Override
-    public void keyPressed(KeyEvent e) {
-        updateKeyDisplay(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // Opcional: manejar cuando se suelta la tecla
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // Opcional: manejar caracteres tipados
-    }
-
-    private void updateKeyDisplay(KeyEvent e) {
-        String keyText = KeyEvent.getKeyText(e.getKeyCode());
-        char keyChar = e.getKeyChar();
-        
-        // Mostrar información de la tecla presionada
-        if (Character.isLetterOrDigit(keyChar) || Character.isSpaceChar(keyChar)) {
-            pressedKeyLabel.setText("Tecla: " + keyText + " ('" + keyChar + "')");
-        } else {
-            pressedKeyLabel.setText("Tecla: " + keyText);
-        }
-
-        // Cambiar el color del panel para dar feedback visual
-        JPanel keyPanel = (JPanel) pressedKeyLabel.getParent();
-        keyPanel.setBackground(SUCCESS_COLOR);
-        
-        // Actualizar estado
-        statusLabel.setText("✓ Tecla detectada: " + keyText);
+        keyDisplayPanel.setBackground(SUCCESS_COLOR);
+        statusLabel.setText("✓ Señal recibida correctamente");
         statusLabel.setForeground(SUCCESS_COLOR);
 
-        // Efecto de animación: volver al color original después de un tiempo
-        Timer timer = new Timer(500, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                keyPanel.setBackground(ACCENT_COLOR);
-                statusLabel.setText("Sistema activo - Listo para detectar");
-                statusLabel.setForeground(SUCCESS_COLOR);
-            }
+        // Efecto visual: volver al color base después de 0.5s
+        Timer timer = new Timer(500, e -> {
+            keyDisplayPanel.setBackground(ACCENT_COLOR);
+            statusLabel.setText("Sistema activo - Listo para recibir señales");
+            statusLabel.setForeground(SUCCESS_COLOR);
         });
         timer.setRepeats(false);
         timer.start();
-
-        // Imprimir en consola (manteniendo funcionalidad original)
-        System.out.println("Tecla presionada: " + keyText + " (Código: " + e.getKeyCode() + ")");
-    }
-
-    // Método para asegurar que el panel mantenga el foco
-    @Override
-    public void requestFocus() {
-        super.requestFocus();
-        this.requestFocusInWindow();
     }
 }
