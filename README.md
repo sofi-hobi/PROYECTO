@@ -9,6 +9,6 @@ Los manuales del proyecto están disponibles en la carpeta `manuals`:
 
 Los diagramas de clase, caso de uso y de arquitectura están disponibles en la carpeta `manuals`:
 
-- [Diagrama de Caso de Uso](./Design/Diagrama%20Caso%20de%20Uso.png)
+- [Diagrama de Caso de Uso](./Design/Diagrama%20Caso%20de%20Usos.png)
 - [Diagrama de Clase](./Design/Diagrama%20de%20Clase-%20Arduino%20IR.png)
 - [Diagrama de Arquitectura](./Design/Diagrama%20de%20Arquitectura.png)
