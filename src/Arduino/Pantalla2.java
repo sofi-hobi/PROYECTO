@@ -2,6 +2,9 @@ package Arduino;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -136,19 +139,45 @@ public class Pantalla2 extends JPanel {
 
     // 👉 Método que puedes invocar desde Arduino para mostrar el número
     public void mostrarNumero(String numero) {
-        displayLabel.setText("" + numero + " aplastado");
+    keyDisplayPanel.removeAll();  // Limpiar contenido anterior
 
-        keyDisplayPanel.setBackground(SUCCESS_COLOR);
-        statusLabel.setText("✓ Señal recibida correctamente");
+    if (numero != null && !numero.isEmpty()) {
+        try {
+            String rutaImagen = "imagenes_numeros/" + numero + ".png";  // Asegúrate de que esta carpeta exista
+            ImageIcon icono = new ImageIcon(ImageIO.read(new File(rutaImagen))
+                    .getScaledInstance(80, 100, Image.SCALE_SMOOTH));
+            JLabel imagenLabel = new JLabel(icono);
+            imagenLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            keyDisplayPanel.add(imagenLabel, BorderLayout.CENTER);
+        } catch (IOException e) {
+            JLabel error = new JLabel("❌ Imagen no encontrada para: " + numero);
+            error.setForeground(Color.WHITE);
+            error.setHorizontalAlignment(SwingConstants.CENTER);
+            keyDisplayPanel.add(error, BorderLayout.CENTER);
+            System.err.println("Error cargando imagen para número '" + numero + "': " + e.getMessage());
+        }
+    } else {
+        JLabel vacio = new JLabel("Número: No disponible");
+        vacio.setForeground(Color.WHITE);
+        vacio.setHorizontalAlignment(SwingConstants.CENTER);
+        keyDisplayPanel.add(vacio, BorderLayout.CENTER);
+    }
+
+    // Cambiar color temporal para feedback
+    keyDisplayPanel.setBackground(SUCCESS_COLOR);
+    statusLabel.setText("✓ Señal recibida correctamente");
+    statusLabel.setForeground(SUCCESS_COLOR);
+
+    // Efecto visual: restaurar color después de 0.5s
+    Timer timer = new Timer(500, e -> {
+        keyDisplayPanel.setBackground(ACCENT_COLOR);
+        statusLabel.setText("Sistema activo - Listo para recibir señales");
         statusLabel.setForeground(SUCCESS_COLOR);
+    });
+    timer.setRepeats(false);
+    timer.start();
 
-        // Efecto visual: volver al color base después de 0.5s
-        Timer timer = new Timer(500, e -> {
-            keyDisplayPanel.setBackground(ACCENT_COLOR);
-            statusLabel.setText("Sistema activo - Listo para recibir señales");
-            statusLabel.setForeground(SUCCESS_COLOR);
-        });
-        timer.setRepeats(false);
-        timer.start();
+    keyDisplayPanel.revalidate();
+    keyDisplayPanel.repaint();
     }
 }
