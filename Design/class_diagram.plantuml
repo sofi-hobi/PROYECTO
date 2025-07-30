@@ -51,7 +51,13 @@ package "🎛️ Interfaz Gráfica" as GUI {
         +titleLabel: JLabel
         +etiquetaNumero: JLabel
         +logoLabel: JLabel
-        -BUTTON_HOVER: Color
+        -PRIMARY_COLOR: Color = #59BBCE
+        -SECONDARY_COLOR: Color = #2B84C0
+        -BACKGROUND_COLOR: Color = #D7FFFF
+        -TEXT_COLOR: Color = #2C3E50
+        -BUTTON_HOVER: Color = #1E73A5
+        -SUCCESS_COLOR: Color = #96CB72
+        -DANGER_COLOR: Color = #D77064
         --
         +pantallainicial1()
         -initComponents(): void
@@ -67,9 +73,11 @@ package "🎛️ Interfaz Gráfica" as GUI {
         +setLogo(rutaLogo: String): void
         --
         **Responsabilidades:**
-        • Interfaz principal del sistema
-        • Navegación entre pantallas
-        • Configuración visual y temas
+        • Interfaz principal con diseño avanzado
+        • Sistema de temas personalizables
+        • Navegación con efectos hover
+        • Gestión dinámica de imágenes
+        • Colores y estilos profesionales
     }
     
     class Pantalla2 <<Display>> {
@@ -79,12 +87,12 @@ package "🎛️ Interfaz Gráfica" as GUI {
         -displayLabel: JLabel
         -backButton: JButton
         -keyDisplayPanel: JPanel
-        -PRIMARY_COLOR: Color = #41128185
-        -SECONDARY_COLOR: Color = #52152219
-        -BACKGROUND_COLOR: Color = #236240241
-        -TEXT_COLOR: Color = #44062080
-        -SUCCESS_COLOR: Color = #39174096
-        -ACCENT_COLOR: Color = #15589182
+        -PRIMARY_COLOR: Color = #2980B9
+        -SECONDARY_COLOR: Color = #3498DB
+        -BACKGROUND_COLOR: Color = #ECF0F1
+        -TEXT_COLOR: Color = #2C3E50
+        -SUCCESS_COLOR: Color = #27AE60
+        -ACCENT_COLOR: Color = #9B59B6
         -CARD_COLOR: Color = #FFFFFF
         --
         +Pantalla2()
@@ -96,17 +104,24 @@ package "🎛️ Interfaz Gráfica" as GUI {
         -createStyledButton(text: String): JButton
         +mostrarNumero(numero: String): void
         -updateVisualFeedback(): void
+        -loadImageFromFile(numero: String): ImageIcon
         --
         **Responsabilidades:**
-        • Visualización de códigos IR
-        • Feedback visual en tiempo real
-        • Animaciones de estado
+        • Visualización de códigos IR con imágenes
+        • Feedback visual mejorado con efectos
+        • Animaciones de estado y transiciones
+        • Carga dinámica de recursos gráficos
     }
     
     class MenuComando <<Modal>> {
         -parentFrame: JFrame
         -historialBtn: JButton
         -cerrarBtn: JButton
+        -FONDO_COLOR: Color = #F5F0FF
+        -AZUL_PRIMARIO: Color = #00BFFF
+        -VERDE_CONTROL: Color = #7ED957
+        -ROJO_CERRAR: Color = #FF6B6B
+        -TEXTO_OSCURO: Color = #212121
         --
         +MenuComando(parentFrame: JFrame)
         -initUI(): void
@@ -114,16 +129,16 @@ package "🎛️ Interfaz Gráfica" as GUI {
         -mostrarHistorial(): void
         --
         **Responsabilidades:**
-        • Menú de opciones avanzadas
-        • Acceso al historial
-        • Configuraciones adicionales
+        • Menú de opciones con diseño mejorado
+        • Acceso al historial de comandos
+        • Interfaz modal con efectos visuales
     }
 }
 package "🔌 Controlador Principal" as Controller {
     
     class arduinoc <<Main Controller>> {
         -{static}BAUD_RATE: int = 9600
-        -{static}DEFAULT_PORT: String = "COM4"
+        -{static}DEFAULT_PORT: String = "COM12"
         -nombrePuerto: String
         -puerto: SerialPort
         -pantalla: pantallainicial1
@@ -141,7 +156,7 @@ package "🔌 Controlador Principal" as Controller {
         -leerDatosSerial(): void
         -cerrarConexion(): void
         --
-        **Códigos IR Soportados:**
+        **21 Códigos IR Soportados:**
         • 0x7: Bajar Volumen
         • 0x15: Subir Volumen  
         • 0x16-0x4A: Números 0-9
@@ -168,9 +183,10 @@ package "💾 Persistencia de Datos" as Data {
         --
         **Responsabilidades:**
         • Gestión de base de datos SQLite
-        • Persistencia de códigos IR
-        • Consultas de historial
-        • Patrón DAO implementado
+        • Persistencia de códigos IR recibidos
+        • Consultas de historial con timestamps
+        • Patrón DAO para abstracción de datos
+        • Manejo seguro de conexiones
     }
     
     class DatabaseInitializer <<Utility>> {
@@ -182,10 +198,15 @@ package "💾 Persistencia de Datos" as Data {
         -{static}createTables(conn: Connection): void
         -{static}validateSchema(): boolean
         --
-        **Esquema de Tabla:**
-        • id: INTEGER PRIMARY KEY
+        **Esquema de Tabla registros_arduino:**
+        • id: INTEGER PRIMARY KEY AUTOINCREMENT
         • codigo_arduino: TEXT NOT NULL  
-        • marca_tiempo: TIMESTAMP DEFAULT NOW
+        • marca_tiempo: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        --
+        **Responsabilidades:**
+        • Inicialización automática de BD
+        • Creación de esquema de tablas
+        • Validación de estructura existente
     }
 }
 
@@ -247,6 +268,16 @@ package "🔧 Librerías Externas" as External {
         +executeUpdate(): int
         +executeQuery(): ResultSet
     }
+    
+    class ImageIO <<Java IO>> {
+        +{static}read(file: File): BufferedImage
+    }
+    
+    class Timer <<Swing Timer>> {
+        +Timer(delay: int, listener: ActionListener)
+        +start(): void
+        +setRepeats(repeats: boolean): void
+    }
 }
 package "🎨 Framework Swing" as Swing {
     
@@ -306,21 +337,23 @@ ArduinoDataDAO ..> Connection : <<uses>>
 ArduinoDataDAO ..> PreparedStatement : <<uses>>
 DatabaseInitializer ..> Connection : <<creates>>
 pantallainicial1 ..> MenuComando : <<creates>>
+Pantalla2 ..> ImageIO : <<uses>>
+Pantalla2 ..> Timer : <<uses>>
 
 ' ===== RELACIONES ESPECIALES =====
 CodigoIR --> arduinoc : <<triggers actions>>
 DatabaseInitializer --> ArduinoDataDAO : <<initializes for>>
 
 ' ===== NOTAS EXPLICATIVAS =====
-note top of arduinoc : "**CONTROLADOR PRINCIPAL**\n• Punto de entrada del sistema\n• Gestiona comunicación serial\n• Procesa 21 códigos IR diferentes\n• Coordina GUI y persistencia"
+note top of arduinoc : "**CONTROLADOR PRINCIPAL**\n• Punto de entrada del sistema\n• Gestiona comunicación serial COM12\n• Procesa 21 códigos IR diferentes\n• Coordina GUI mejorada y persistencia\n• Implementa efectos visuales"
 
 note right of ArduinoDataDAO : "**PATRÓN DAO**\n• Abstrae acceso a SQLite\n• Operaciones CRUD\n• Manejo de conexiones\n• Logging de actividad"
 
-note left of pantallainicial1 : "**PANTALLA PRINCIPAL**\n• Interfaz de usuario principal\n• Sistema de temas personalizable\n• Navegación entre módulos\n• Feedback visual"
+note left of pantallainicial1 : "**PANTALLA PRINCIPAL MEJORADA**\n• Interfaz de usuario con diseño avanzado\n• Sistema de temas personalizables\n• Navegación con efectos hover\n• Gestión dinámica de imágenes\n• Colores y estilos profesionales"
 
-note bottom of Pantalla2 : "**DISPLAY DE CÓDIGOS**\n• Visualización en tiempo real\n• Animaciones de estado\n• Feedback inmediato\n• Timer para efectos visuales"
+note bottom of Pantalla2 : "**DISPLAY DE CÓDIGOS MEJORADO**\n• Visualización con imágenes dinámicas\n• Animaciones y efectos visuales\n• Feedback inmediato con colores\n• Timer para transiciones suaves\n• Carga de imagenes_numeros/*.png"
 
-note right of CodigoIR : "**CÓDIGOS IR SOPORTADOS**\n• Control de volumen (2)\n• Dígitos numéricos (10)\n• Navegación canales (3)\n• Control reproducción (3)\n• Comandos sistema (3)"
+note right of CodigoIR : "**21 CÓDIGOS IR SOPORTADOS**\n• Control de volumen (2)\n• Dígitos numéricos (10)\n• Navegación canales (3)\n• Control reproducción (3)\n• Comandos sistema (3)\n• Total: 21 comandos únicos"
 
 note left of DatabaseInitializer : "**INICIALIZADOR BD**\n• Creación automática de esquema\n• Validación de estructura\n• Migración de datos\n• Configuración inicial"
 

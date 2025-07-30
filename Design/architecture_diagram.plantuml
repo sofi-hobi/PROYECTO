@@ -35,15 +35,17 @@ title **Arquitectura de Software - Sistema de Control Arduino IR**\n**Patrón: A
 ' ===== CAPA DE PRESENTACIÓN =====
 package "🎨 **CAPA DE PRESENTACIÓN**" as PresentationLayer {
     component "pantallainicial1" as GUI1 <<Swing Panel>> {
-        [Interfaz Principal]
-        [Navegación]
-        [Temas Visuales]
+        [Interfaz Principal Mejorada]
+        [Navegación con Estilos]
+        [Sistema de Temas Avanzado]
+        [Efectos Hover y Transiciones]
     }
     
     component "Pantalla2" as GUI2 <<Display Panel>> {
-        [Visualización IR]
-        [Feedback Visual]
-        [Animaciones]
+        [Visualización IR con Imágenes]
+        [Feedback Visual Mejorado]
+        [Animaciones y Efectos]
+        [Carga Dinámica de Recursos]
     }
     
     component "MenuComando" as GUI3 <<Modal Dialog>> {
@@ -157,16 +159,18 @@ database "📊 **BASE DE DATOS**" as Database {
 ' ===== CONFIGURACIÓN DEL SISTEMA =====
 package "⚙️ **CONFIGURACIÓN**" as Configuration {
     component "Archivos de Configuración" as ConfigFiles <<Configuration>> {
-        [Parámetros Puerto: COM4]
+        [Parámetros Puerto: COM12]
         [Velocidad: 9600 baud]
         [Timeout Conexión]
-        [Códigos IR Mapping]
+        [21 Códigos IR Mapping]
     }
     
     component "Recursos Visuales" as Resources <<Static Resources>> {
         [logo.png]
-        [Colores y Temas]
-        [Fonts y Estilos]
+        [imagenes_numeros/*.png]
+        [Colores y Temas Personalizados]
+        [Fonts y Estilos Mejorados]
+        [Efectos Visuales y Animaciones]
     }
 }
 
@@ -199,6 +203,7 @@ GUI1 --> SwingFW : "Componentes UI"
 GUI2 --> SwingFW : "Renderizado"
 GUI3 --> SwingFW : "Diálogos"
 DAO --> SQLiteDB : "JDBC Connection"
+GUI2 --> Resources : "Carga imágenes"
 
 ' ===== PATRONES ARQUITECTÓNICOS =====
 note top of PresentationLayer : "**PATRÓN MVC**\n• Vista: Componentes Swing\n• Controlador: arduinoc\n• Modelo: ArduinoDataDAO"
@@ -211,27 +216,31 @@ note right of DataLayer : "**PATRÓN DAO**\n• Abstrae acceso a datos\n• Inde
 
 ' ===== CARACTERÍSTICAS ARQUITECTÓNICAS =====
 legend top right
-  **Características de la Arquitectura:**
+  **Características de la Arquitectura (Actualizada):**
   
   **🔄 Separación de Responsabilidades**
   • Cada capa tiene responsabilidad específica
   • Bajo acoplamiento entre componentes
   
-  **📈 Escalabilidad**
+  **📈 Escalabilidad Mejorada**
   • Arquitectura por capas facilita extensión
   • Servicios independientes y reutilizables
+  • Soporte para 21 códigos IR diferentes
   
-  **🔧 Mantenibilidad**
+  **🔧 Mantenibilidad Avanzada**
   • Código organizado por funcionalidad
   • Patrones de diseño bien definidos
+  • Interfaz gráfica mejorada con efectos
   
   **🛡️ Robustez**
   • Manejo de errores por capa
   • Validación en múltiples niveles
+  • Gestión mejorada de recursos gráficos
   
-  **⚡ Performance**
+  **⚡ Performance Optimizado**
   • Pool de conexiones para BD
   • Procesamiento asíncrono de datos seriales
+  • Carga eficiente de imágenes e iconos
 end legend
 
 @enduml

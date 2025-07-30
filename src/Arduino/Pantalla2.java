@@ -8,7 +8,12 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Clase Pantalla2 representa la interfaz secundaria del sistema Arduino,
+ * utilizada para mostrar los números recibidos desde el control remoto IR.
+ */
 public class Pantalla2 extends JPanel {
+    // Componentes de la interfaz
     private JLabel titleLabel;
     private JLabel instructionLabel;
     private JLabel statusLabel;
@@ -16,7 +21,7 @@ public class Pantalla2 extends JPanel {
     private JButton backButton;
     private JPanel keyDisplayPanel;
 
-    // Colores del tema
+    // Colores del tema visual
     private final Color PRIMARY_COLOR = new Color(41, 128, 185);
     private final Color SECONDARY_COLOR = new Color(52, 152, 219);
     private final Color BACKGROUND_COLOR = new Color(236, 240, 241);
@@ -25,10 +30,16 @@ public class Pantalla2 extends JPanel {
     private final Color ACCENT_COLOR = new Color(155, 89, 182);
     private final Color CARD_COLOR = Color.WHITE;
 
+    /**
+     * Constructor que inicializa los componentes visuales.
+     */
     public Pantalla2() {
         initComponents();
     }
 
+    /**
+     * Método para inicializar la estructura general de la interfaz.
+     */
     private void initComponents() {
         setLayout(new BorderLayout());
         setBackground(BACKGROUND_COLOR);
@@ -39,6 +50,9 @@ public class Pantalla2 extends JPanel {
         add(createBottomPanel(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Panel superior con título principal.
+     */
     private JPanel createTopPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(BACKGROUND_COLOR);
@@ -52,6 +66,9 @@ public class Pantalla2 extends JPanel {
         return panel;
     }
 
+    /**
+     * Panel central con mensajes e imagen de número detectado.
+     */
     private JPanel createCenterPanel() {
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
@@ -74,7 +91,7 @@ public class Pantalla2 extends JPanel {
         keyDisplayPanel.setMaximumSize(new Dimension(300, 100));
         keyDisplayPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        displayLabel = new JLabel("⏳ Aún no se ha detectado nada", SwingConstants.CENTER);
+        displayLabel = new JLabel("\u23F3 A\u00FAn no se ha detectado nada", SwingConstants.CENTER);
         displayLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         displayLabel.setForeground(Color.WHITE);
         keyDisplayPanel.add(displayLabel, BorderLayout.CENTER);
@@ -92,12 +109,15 @@ public class Pantalla2 extends JPanel {
         return centerPanel;
     }
 
+    /**
+     * Panel inferior con botón para regresar.
+     */
     private JPanel createBottomPanel() {
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         bottomPanel.setBackground(BACKGROUND_COLOR);
         bottomPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
-        backButton = createStyledButton("🔙 Regresar al Menú Principal");
+        backButton = createStyledButton("\uD83D\uDD19 Regresar al Men\u00FA Principal");
         backButton.addActionListener(evt -> {
             Window window = SwingUtilities.getWindowAncestor(this);
             if (window != null) {
@@ -107,10 +127,17 @@ public class Pantalla2 extends JPanel {
         bottomPanel.add(backButton);
         return bottomPanel;
     }
+
+    /**
+     * Devuelve el botón de regreso.
+     */
     public JButton getBackButton() {
-    return backButton;
-}
-    
+        return backButton;
+    }
+
+    /**
+     * Crea un botón con estilo personalizado.
+     */
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -137,47 +164,50 @@ public class Pantalla2 extends JPanel {
         return button;
     }
 
-    // 👉 Método que puedes invocar desde Arduino para mostrar el número
+    /**
+     * Muestra el número recibido desde Arduino con imagen o texto.
+     * @param numero Texto que representa el número detectado.
+     */
     public void mostrarNumero(String numero) {
-    keyDisplayPanel.removeAll();  // Limpiar contenido anterior
+        keyDisplayPanel.removeAll();  // Limpiar contenido anterior
 
-    if (numero != null && !numero.isEmpty()) {
-        try {
-            String rutaImagen = "imagenes_numeros/" + numero + ".png";  // Asegúrate de que esta carpeta exista
-            ImageIcon icono = new ImageIcon(ImageIO.read(new File(rutaImagen))
-                    .getScaledInstance(80, 100, Image.SCALE_SMOOTH));
-            JLabel imagenLabel = new JLabel(icono);
-            imagenLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            keyDisplayPanel.add(imagenLabel, BorderLayout.CENTER);
-        } catch (IOException e) {
-            JLabel error = new JLabel("❌ Imagen no encontrada para: " + numero);
-            error.setForeground(Color.WHITE);
-            error.setHorizontalAlignment(SwingConstants.CENTER);
-            keyDisplayPanel.add(error, BorderLayout.CENTER);
-            System.err.println("Error cargando imagen para número '" + numero + "': " + e.getMessage());
+        if (numero != null && !numero.isEmpty()) {
+            try {
+                String rutaImagen = "imagenes_numeros/" + numero + ".png";  // Ruta esperada
+                ImageIcon icono = new ImageIcon(ImageIO.read(new File(rutaImagen))
+                        .getScaledInstance(80, 100, Image.SCALE_SMOOTH));
+                JLabel imagenLabel = new JLabel(icono);
+                imagenLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                keyDisplayPanel.add(imagenLabel, BorderLayout.CENTER);
+            } catch (IOException e) {
+                JLabel error = new JLabel("\u274C Imagen no encontrada para: " + numero);
+                error.setForeground(Color.WHITE);
+                error.setHorizontalAlignment(SwingConstants.CENTER);
+                keyDisplayPanel.add(error, BorderLayout.CENTER);
+                System.err.println("Error cargando imagen para n\u00FAmero '" + numero + "': " + e.getMessage());
+            }
+        } else {
+            JLabel vacio = new JLabel("N\u00FAmero: No disponible");
+            vacio.setForeground(Color.WHITE);
+            vacio.setHorizontalAlignment(SwingConstants.CENTER);
+            keyDisplayPanel.add(vacio, BorderLayout.CENTER);
         }
-    } else {
-        JLabel vacio = new JLabel("Número: No disponible");
-        vacio.setForeground(Color.WHITE);
-        vacio.setHorizontalAlignment(SwingConstants.CENTER);
-        keyDisplayPanel.add(vacio, BorderLayout.CENTER);
-    }
 
-    // Cambiar color temporal para feedback
-    keyDisplayPanel.setBackground(SUCCESS_COLOR);
-    statusLabel.setText("✓ Señal recibida correctamente");
-    statusLabel.setForeground(SUCCESS_COLOR);
-
-    // Efecto visual: restaurar color después de 0.5s
-    Timer timer = new Timer(500, e -> {
-        keyDisplayPanel.setBackground(ACCENT_COLOR);
-        statusLabel.setText("Sistema activo - Listo para recibir señales");
+        // Feedback visual temporal
+        keyDisplayPanel.setBackground(SUCCESS_COLOR);
+        statusLabel.setText("\u2713 Se\u00F1al recibida correctamente");
         statusLabel.setForeground(SUCCESS_COLOR);
-    });
-    timer.setRepeats(false);
-    timer.start();
 
-    keyDisplayPanel.revalidate();
-    keyDisplayPanel.repaint();
+        // Efecto visual: restaurar estado luego de 0.5 segundos
+        Timer timer = new Timer(500, e -> {
+            keyDisplayPanel.setBackground(ACCENT_COLOR);
+            statusLabel.setText("Sistema activo - Listo para recibir se\u00F1ales");
+            statusLabel.setForeground(SUCCESS_COLOR);
+        });
+        timer.setRepeats(false);
+        timer.start();
+
+        keyDisplayPanel.revalidate();
+        keyDisplayPanel.repaint();
     }
 }
