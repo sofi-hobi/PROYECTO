@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainArduino",
+            "request": "launch",
+            "mainClass": "Arduino.MainArduino",
+            "projectName": "PROYECTO_b335466d"
+        },
+        {
+            "type": "java",
+            "name": "arduinoc",
+            "request": "launch",
+            "mainClass": "Arduino.arduinoc",
+            "projectName": "PROYECTO_b335466d"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
