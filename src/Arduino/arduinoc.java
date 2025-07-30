@@ -8,7 +8,7 @@ import Arduino.pantallainicial1;
 public class arduinoc {
 
     public static void main(String[] args) {
-        String nombrePuerto = "COM4";
+        String nombrePuerto = "COM12";
 
         // Instancia de la pantalla (con el botón)
         pantallainicial1 pantalla = new pantallainicial1();
@@ -62,7 +62,7 @@ public class arduinoc {
                             switch (linea) {
                                 case "0x7":
                                     System.out.println("Bajar el Volumen Presionado");
-                                    pantalla2.mostrarNumero("Bajar el Volumen");
+                                    pantalla2.mostrarNumero("vol_down");
                                         
                                     break;
 
@@ -118,32 +118,32 @@ public class arduinoc {
                                     break;
                                 case "0x45":
                                     System.out.println("Volver al Canal Anterior");   
-                                    pantalla2.mostrarNumero("Canal Anterior");
+                                    pantalla2.mostrarNumero("ch_back");
                                      break;
                                 case "0x46":
                                     System.out.println("Canal Actual");   
-                                    pantalla2.mostrarNumero("Canal Actual");
+                                    pantalla2.mostrarNumero("ch_act");
                                      break;
                                 case "0x47":
                                     System.out.println("Canal Proximo");   
-                                    pantalla2.mostrarNumero("Canal Proximo");
+                                    pantalla2.mostrarNumero("ch_next");
                                      break;
                                 case "0x44":
                                     System.out.println("Retroceder Reproduccion");   
-                                    pantalla2.mostrarNumero("Retroceder Reproduccion");
+                                    pantalla2.mostrarNumero("rep_back");
                                      break;
                                 case "0x40":
                                     System.out.println("Avanzar Reproduccion");   
-                                    pantalla2.mostrarNumero("Avanzar Reproduccion");
+                                    pantalla2.mostrarNumero("rep_next");
                                      break;
                                 case "0x43":
                                     System.out.println("Saltar Reproduccion ");   
-                                    pantalla2.mostrarNumero("Saltar Reproduccion");
+                                    pantalla2.mostrarNumero("rep_skip");
                                      break;
                                 
                                 case "0x15":
                                     System.out.println("Subir Volumen ");   
-                                    pantalla2.mostrarNumero("Subir Volumen");
+                                    pantalla2.mostrarNumero("vol_up");
                                      break;
                                 case "0x19":
                                     System.out.println(" Acción: Ejecutar botón desde Arduino");
