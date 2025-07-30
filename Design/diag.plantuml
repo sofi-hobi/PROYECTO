@@ -1,0 +1,110 @@
+@startuml Diagrama_Casos_Uso_Arduino
+
+!theme plain
+skinparam linetype ortho
+skinparam arrow {
+    thickness 2
+    color black
+}
+skinparam usecase {
+    borderThickness 2
+}
+
+!define USUARIO_COLOR #4A90E2
+!define SISTEMA_COLOR #7ED321
+!define ARDUINO_COLOR #F5A623
+
+title Diagrama de Casos de Uso - Sistema de Control con Arduino
+
+' Actores
+actor "Usuario" as usuario USUARIO_COLOR
+actor "Arduino/Sensor IR" as arduino ARDUINO_COLOR
+
+' Sistema
+rectangle "Sistema de Control Arduino" as sistema {
+    
+    ' Casos de uso principales
+    usecase "Iniciar Sistema" as UC01
+    usecase "Mostrar Pantalla Principal" as UC02
+    usecase "Acceder a Menú de Comandos" as UC03
+    usecase "Salir del Sistema" as UC04
+    
+    ' Casos de uso de control numérico
+    package "Control Numérico" {
+        usecase "Mostrar Número 0-9" as UC05
+        usecase "Actualizar Display" as UC06
+    }
+    
+    ' Casos de uso de control de volumen
+    package "Control de Audio" {
+        usecase "Subir Volumen" as UC07
+        usecase "Bajar Volumen" as UC08
+    }
+    
+    ' Casos de uso de navegación de canales
+    package "Control de Canales" {
+        usecase "Canal Anterior" as UC09
+        usecase "Canal Actual" as UC10
+        usecase "Canal Próximo" as UC11
+    }
+    
+    ' Casos de uso de reproducción
+    package "Control de Reproducción" {
+        usecase "Avanzar Reproducción" as UC12
+        usecase "Retroceder Reproducción" as UC13
+        usecase "Saltar Reproducción" as UC14
+    }
+    
+    ' Casos de uso del sistema
+    package "Gestión del Sistema" {
+        usecase "Procesar Código IR" as UC15
+        usecase "Validar Código" as UC16
+        usecase "Guardar en Base de Datos" as UC17
+        usecase "Mostrar Historial" as UC18
+        usecase "Conectar Puerto Serial" as UC19
+        usecase "Leer Datos Serial" as UC20
+    }
+}
+
+' Relaciones Usuario - Sistema
+usuario --> UC01 : "Hacer clic en Iniciar"
+usuario --> UC02 : "Visualizar interfaz"
+usuario --> UC03 : "Abrir menú comandos"
+usuario --> UC04 : "Cerrar aplicación"
+usuario --> UC18 : "Consultar historial"
+
+' Relaciones Arduino - Sistema
+arduino --> UC15 : "Envía código IR"
+arduino --> UC19 : "Establece conexión"
+arduino --> UC20 : "Transmite datos"
+
+' Relaciones internas del sistema
+UC15 --> UC16 : <<include>>
+UC16 --> UC17 : <<include>>
+UC15 --> UC06 : <<extend>>
+
+' Códigos específicos que activan casos de uso
+UC15 --> UC05 : "0x16, 0xC, 0x18, 0x5E, 0x8, 0x1C, 0x5A, 0x42, 0x52, 0x4A"
+UC15 --> UC07 : "0x15"
+UC15 --> UC08 : "0x7"
+UC15 --> UC09 : "0x45"
+UC15 --> UC10 : "0x46"
+UC15 --> UC11 : "0x47"
+UC15 --> UC12 : "0x40"
+UC15 --> UC13 : "0x44"
+UC15 --> UC14 : "0x43"
+UC15 --> UC01 : "0x19"
+UC15 --> UC03 : "0xD"
+UC15 --> UC04 : "0x9"
+
+' Dependencias entre casos de uso
+UC01 --> UC02 : <<include>>
+UC01 --> UC19 : <<include>>
+UC02 --> UC06 : <<include>>
+
+' Notas explicativas
+note right of UC15 : "Procesa códigos hexadecimales\nrecibidos desde Arduino"
+note left of UC17 : "Almacena todos los códigos\nen base de datos SQLite"
+note bottom of UC19 : "Conecta por puerto COM4\na 9600 baudios"
+
+@enduml

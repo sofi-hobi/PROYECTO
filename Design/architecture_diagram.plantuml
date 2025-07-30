@@ -1,0 +1,237 @@
+@startuml Diagrama_Arquitectura_Software
+
+!theme plain
+skinparam linetype ortho
+skinparam component {
+    BackgroundColor #FFFFFF
+    BorderColor #2C3E50
+    BorderThickness 2
+    ArrowColor #34495E
+    ArrowThickness 2
+    FontColor #2C3E50
+    FontSize 11
+}
+skinparam package {
+    BackgroundColor #ECF0F1
+    BorderColor #3498DB
+    BorderThickness 2
+    FontColor #2C3E50
+    FontSize 14
+    FontStyle bold
+}
+skinparam database {
+    BackgroundColor #F8F9FA
+    BorderColor #E74C3C
+    BorderThickness 2
+}
+skinparam cloud {
+    BackgroundColor #E8F8F5
+    BorderColor #27AE60
+    BorderThickness 2
+}
+
+title **Arquitectura de Software - Sistema de Control Arduino IR**\n**Patrón: Arquitectura por Capas + MVC**
+
+' ===== CAPA DE PRESENTACIÓN =====
+package "🎨 **CAPA DE PRESENTACIÓN**" as PresentationLayer {
+    component "pantallainicial1" as GUI1 <<Swing Panel>> {
+        [Interfaz Principal]
+        [Navegación]
+        [Temas Visuales]
+    }
+    
+    component "Pantalla2" as GUI2 <<Display Panel>> {
+        [Visualización IR]
+        [Feedback Visual]
+        [Animaciones]
+    }
+    
+    component "MenuComando" as GUI3 <<Modal Dialog>> {
+        [Menú Opciones]
+        [Historial]
+        [Configuración]
+    }
+    
+    note right of GUI1 : "**Vista (View)**\n• Manejo de eventos UI\n• Renderizado de componentes\n• Estilos y temas"
+}
+
+' ===== CAPA DE LÓGICA DE NEGOCIO =====
+package "⚙️ **CAPA DE LÓGICA DE NEGOCIO**" as BusinessLayer {
+    component "Controlador Principal" as Controller <<Main Controller>> {
+        [Procesamiento IR]
+        [Validación Códigos]
+        [Orquestación Sistema]
+    }
+    
+    component "Gestor de Códigos IR" as CodeManager <<Business Logic>> {
+        [Interpretación Códigos]
+        [Mapeo de Acciones]
+        [Validación Entrada]
+    }
+    
+    component "Coordinador GUI" as GUICoordinator <<Presenter>> {
+        [Actualización Vistas]
+        [Manejo Estados]
+        [Comunicación Componentes]
+    }
+    
+    note right of Controller : "**Controlador (Controller)**\n• Lógica de negocio central\n• Coordinación entre capas\n• Procesamiento de comandos"
+}
+
+' ===== CAPA DE SERVICIOS =====
+package "🔧 **CAPA DE SERVICIOS**" as ServiceLayer {
+    component "Servicio Serial" as SerialService <<Hardware Service>> {
+        [Gestión Puerto COM]
+        [Lectura Datos]
+        [Manejo Conexiones]
+    }
+    
+    component "Servicio de Persistencia" as PersistenceService <<Data Service>> {
+        [Operaciones CRUD]
+        [Gestión Transacciones]
+        [Logging Actividad]
+    }
+    
+    component "Servicio de Configuración" as ConfigService <<Configuration Service>> {
+        [Parámetros Sistema]
+        [Configuración Puerto]
+        [Preferencias Usuario]
+    }
+    
+    note right of SerialService : "**Servicios de Infraestructura**\n• Abstracción hardware\n• Servicios transversales\n• Comunicación externa"
+}
+
+' ===== CAPA DE ACCESO A DATOS =====
+package "💾 **CAPA DE ACCESO A DATOS**" as DataLayer {
+    component "ArduinoDataDAO" as DAO <<Data Access Object>> {
+        [Patrón DAO]
+        [Operaciones BD]
+        [Mapeo Objetos]
+    }
+    
+    component "DatabaseInitializer" as DBInit <<Database Setup>> {
+        [Inicialización Esquema]
+        [Migración Datos]
+        [Validación Estructura]
+    }
+    
+    component "Connection Pool" as ConnPool <<Connection Management>> {
+        [Gestión Conexiones]
+        [Pool de Conexiones]
+        [Optimización Recursos]
+    }
+    
+    note right of DAO : "**Modelo (Model)**\n• Acceso a datos\n• Persistencia\n• Integridad de datos"
+}
+
+' ===== RECURSOS EXTERNOS =====
+cloud "🌐 **RECURSOS EXTERNOS**" as ExternalResources {
+    component "Arduino Hardware" as Arduino <<Hardware Device>> {
+        [Sensor IR]
+        [Microcontrolador]
+        [Puerto Serial]
+    }
+    
+    component "jSerialComm Library" as SerialLib <<External Library>> {
+        [Comunicación Serial]
+        [Detección Puertos]
+        [API Nativa]
+    }
+    
+    component "Swing Framework" as SwingFW <<UI Framework>> {
+        [Componentes GUI]
+        [Event Handling]
+        [Look & Feel]
+    }
+}
+
+' ===== BASE DE DATOS =====
+database "📊 **BASE DE DATOS**" as Database {
+    component "SQLite DB" as SQLiteDB <<File Database>> {
+        [datos_arduino.db]
+        [Tabla: registros_arduino]
+        [Índices y Constraints]
+    }
+}
+
+' ===== CONFIGURACIÓN DEL SISTEMA =====
+package "⚙️ **CONFIGURACIÓN**" as Configuration {
+    component "Archivos de Configuración" as ConfigFiles <<Configuration>> {
+        [Parámetros Puerto: COM4]
+        [Velocidad: 9600 baud]
+        [Timeout Conexión]
+        [Códigos IR Mapping]
+    }
+    
+    component "Recursos Visuales" as Resources <<Static Resources>> {
+        [logo.png]
+        [Colores y Temas]
+        [Fonts y Estilos]
+    }
+}
+
+' ===== FLUJO DE DATOS PRINCIPALES =====
+
+' Flujo de entrada de datos IR
+Arduino --> SerialService : "Envío código IR\n(0x7, 0x15, etc.)"
+SerialService --> Controller : "Datos seriales\nprocesados"
+Controller --> CodeManager : "Código IR\npara interpretación"
+CodeManager --> GUICoordinator : "Acción\nmapeada"
+GUICoordinator --> GUI2 : "Actualización\ndisplay"
+
+' Flujo de persistencia
+Controller --> PersistenceService : "Guardar\ncódigo recibido"
+PersistenceService --> DAO : "Operación\nCRUD"
+DAO --> SQLiteDB : "INSERT/SELECT\nSQL"
+
+' Flujo de interfaz de usuario
+GUI1 --> GUICoordinator : "Eventos UI\n(clicks, acciones)"
+GUICoordinator --> Controller : "Comandos\nsistema"
+Controller --> GUI1 : "Actualización\nestado"
+
+' Inicialización del sistema
+DBInit --> SQLiteDB : "Crear esquema\ninicialización"
+ConfigService --> ConfigFiles : "Cargar\nconfiguración"
+
+' Dependencias de librerías externas
+SerialService --> SerialLib : "API Serial"
+GUI1 --> SwingFW : "Componentes UI"
+GUI2 --> SwingFW : "Renderizado"
+GUI3 --> SwingFW : "Diálogos"
+DAO --> SQLiteDB : "JDBC Connection"
+
+' ===== PATRONES ARQUITECTÓNICOS =====
+note top of PresentationLayer : "**PATRÓN MVC**\n• Vista: Componentes Swing\n• Controlador: arduinoc\n• Modelo: ArduinoDataDAO"
+
+note bottom of BusinessLayer : "**PATRÓN FACADE**\n• Controller actúa como fachada\n• Simplifica acceso a servicios\n• Coordina operaciones complejas"
+
+note left of ServiceLayer : "**PATRÓN SERVICE LAYER**\n• Abstrae lógica de negocio\n• Servicios reutilizables\n• Separación de responsabilidades"
+
+note right of DataLayer : "**PATRÓN DAO**\n• Abstrae acceso a datos\n• Independencia de BD\n• Operaciones CRUD centralizadas"
+
+' ===== CARACTERÍSTICAS ARQUITECTÓNICAS =====
+legend top right
+  **Características de la Arquitectura:**
+  
+  **🔄 Separación de Responsabilidades**
+  • Cada capa tiene responsabilidad específica
+  • Bajo acoplamiento entre componentes
+  
+  **📈 Escalabilidad**
+  • Arquitectura por capas facilita extensión
+  • Servicios independientes y reutilizables
+  
+  **🔧 Mantenibilidad**
+  • Código organizado por funcionalidad
+  • Patrones de diseño bien definidos
+  
+  **🛡️ Robustez**
+  • Manejo de errores por capa
+  • Validación en múltiples niveles
+  
+  **⚡ Performance**
+  • Pool de conexiones para BD
+  • Procesamiento asíncrono de datos seriales
+end legend
+
+@enduml
