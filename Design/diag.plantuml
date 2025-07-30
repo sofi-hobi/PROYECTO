@@ -14,7 +14,7 @@ skinparam usecase {
 !define SISTEMA_COLOR #7ED321
 !define ARDUINO_COLOR #F5A623
 
-title Diagrama de Casos de Uso - Sistema de Control con Arduino
+title Diagrama de Casos de Uso - Sistema de Control Arduino IR (Actualizado)
 
 ' Actores
 actor "Usuario" as usuario USUARIO_COLOR
@@ -30,9 +30,10 @@ rectangle "Sistema de Control Arduino" as sistema {
     usecase "Salir del Sistema" as UC04
     
     ' Casos de uso de control numérico
-    package "Control Numérico" {
-        usecase "Mostrar Número 0-9" as UC05
-        usecase "Actualizar Display" as UC06
+    package "Control Numérico Mejorado" {
+        usecase "Mostrar Número 0-9 con Imágenes" as UC05
+        usecase "Actualizar Display Visual" as UC06
+        usecase "Cargar Recursos Gráficos" as UC21
     }
     
     ' Casos de uso de control de volumen
@@ -56,13 +57,14 @@ rectangle "Sistema de Control Arduino" as sistema {
     }
     
     ' Casos de uso del sistema
-    package "Gestión del Sistema" {
-        usecase "Procesar Código IR" as UC15
-        usecase "Validar Código" as UC16
+    package "Gestión del Sistema Mejorado" {
+        usecase "Procesar 21 Códigos IR" as UC15
+        usecase "Validar Código Mejorado" as UC16
         usecase "Guardar en Base de Datos" as UC17
-        usecase "Mostrar Historial" as UC18
-        usecase "Conectar Puerto Serial" as UC19
+        usecase "Mostrar Historial Mejorado" as UC18
+        usecase "Conectar Puerto COM12" as UC19
         usecase "Leer Datos Serial" as UC20
+        usecase "Aplicar Efectos Visuales" as UC22
     }
 }
 
@@ -71,10 +73,11 @@ usuario --> UC01 : "Hacer clic en Iniciar"
 usuario --> UC02 : "Visualizar interfaz"
 usuario --> UC03 : "Abrir menú comandos"
 usuario --> UC04 : "Cerrar aplicación"
-usuario --> UC18 : "Consultar historial"
+usuario --> UC18 : "Consultar historial mejorado"
+usuario --> UC22 : "Interactuar con efectos"
 
 ' Relaciones Arduino - Sistema
-arduino --> UC15 : "Envía código IR"
+arduino --> UC15 : "Envía 1 de 21 códigos IR"
 arduino --> UC19 : "Establece conexión"
 arduino --> UC20 : "Transmite datos"
 
@@ -82,6 +85,8 @@ arduino --> UC20 : "Transmite datos"
 UC15 --> UC16 : <<include>>
 UC16 --> UC17 : <<include>>
 UC15 --> UC06 : <<extend>>
+UC06 --> UC21 : <<include>>
+UC06 --> UC22 : <<include>>
 
 ' Códigos específicos que activan casos de uso
 UC15 --> UC05 : "0x16, 0xC, 0x18, 0x5E, 0x8, 0x1C, 0x5A, 0x42, 0x52, 0x4A"
@@ -103,8 +108,8 @@ UC01 --> UC19 : <<include>>
 UC02 --> UC06 : <<include>>
 
 ' Notas explicativas
-note right of UC15 : "Procesa códigos hexadecimales\nrecibidos desde Arduino"
-note left of UC17 : "Almacena todos los códigos\nen base de datos SQLite"
-note bottom of UC19 : "Conecta por puerto COM4\na 9600 baudios"
+note right of UC15 : "Procesa 21 códigos hexadecimales\nrecibidos desde Arduino\ncon visualización mejorada"
+note left of UC17 : "Almacena todos los códigos\nen base de datos SQLite\ncon marca de tiempo"
+note bottom of UC19 : "Conecta por puerto COM12\na 9600 baudios\ncon mejor manejo de errores"
 
 @enduml
