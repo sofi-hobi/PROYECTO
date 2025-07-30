@@ -10,17 +10,15 @@ public class arduinoc {
     public static void main(String[] args) {
         String nombrePuerto = "COM4";
 
-        // Instancia de la pantalla (con el botón)
         pantallainicial1 pantalla = new pantallainicial1();
         Pantalla2 pantalla2 = pantalla.getPantalla2(); 
         javax.swing.JFrame frame = new javax.swing.JFrame("Interfaz con Arduino");
         frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(pantalla);
-        frame.setLocationRelativeTo(null);
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        // Buscar el puerto
         SerialPort puerto = null;
         for (SerialPort p : SerialPort.getCommPorts()) {
             if (p.getSystemPortName().equals(nombrePuerto)) {
@@ -30,19 +28,19 @@ public class arduinoc {
         }
 
         if (puerto == null) {
-            System.out.println("⚠️ Puerto " + nombrePuerto + " no encontrado.");
+            System.out.println(" Puerto " + nombrePuerto + " no encontrado.");
             return;
         }
 
         puerto.setBaudRate(9600);
 
         if (!puerto.openPort()) {
-            System.out.println("❌ No se pudo abrir el puerto " + nombrePuerto);
+            System.out.println("X No se pudo abrir el puerto " + nombrePuerto);
             return;
         }
 
-        System.out.println("✅ Puerto abierto: " + nombrePuerto);
-        System.out.println("⏳ Esperando datos...");
+        System.out.println(" Puerto abierto: " + nombrePuerto);
+        System.out.println(" Esperando datos...");
 
         try {
             InputStream entrada = puerto.getInputStream();
@@ -168,7 +166,7 @@ public class arduinoc {
                                     });
                                      break;
                                 default:
-                                    System.out.println("❓ Código no reconocido: " + linea);
+                                    System.out.println(" Código no reconocido: " + linea);
                                     break;
                             }
                         }
@@ -182,12 +180,12 @@ public class arduinoc {
             e.printStackTrace();
         } finally {
             puerto.closePort();
-            System.out.println("🔌 Puerto cerrado.");
+            System.out.println(" Puerto cerrado.");
         }
     }
 }
         // Scanner scanner = new Scanner(System.in);
-        // System.out.println("⌨️ Ingrese los códigos (uno por línea, ej: 0x7):");
+        // System.out.println("⌨ Ingrese los códigos (uno por línea, ej: 0x7):");
 
         // while (true) {
         //     String linea = scanner.nextLine().trim();
@@ -246,7 +244,7 @@ public class arduinoc {
         //                 pantalla.mostrarNumero("9");
         //                 break;
         //             default:
-        //                 System.out.println("❓ Código no reconocido: " + linea);
+        //                 System.out.println(" Código no reconocido: " + linea);
         //                 break;
         //         }
         //     }

@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "DatabaseInitializer",
+            "request": "launch",
+            "mainClass": "Arduino.DatabaseInitializer",
+            "projectName": "PROYECTO_56fcfeef"
+        },
+        {
+            "type": "java",
+            "name": "arduinoc",
+            "request": "launch",
+            "mainClass": "Arduino.arduinoc",
+            "projectName": "PROYECTO_56fcfeef"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

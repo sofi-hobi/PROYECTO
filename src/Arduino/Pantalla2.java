@@ -134,7 +134,6 @@ public class Pantalla2 extends JPanel {
         return button;
     }
 
-    // 👉 Método que puedes invocar desde Arduino para mostrar el número
     public void mostrarNumero(String numero) {
         displayLabel.setText("" + numero + " aplastado");
 

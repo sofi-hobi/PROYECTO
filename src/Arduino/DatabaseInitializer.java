@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class DatabaseInitializer {
 
-    private static final String DB_URL = "jdbc:sqlite:./datos_arduino.db"; // La BD se llama datos_arduino.db
+    private static final String DB_URL = "jdbc:sqlite:./datos_arduino.db"; 
 
     public static void main(String[] args) {
         initializeDatabase();
@@ -19,7 +19,7 @@ public class DatabaseInitializer {
             conn = DriverManager.getConnection(DB_URL);
             System.out.println("Conexión a la base de datos SQLite establecida.");
 
-            createTables(conn); // Llama a la creación de tablas
+            createTables(conn); 
 
         } catch (SQLException e) {
             System.err.println("Error al conectar o inicializar la base de datos: " + e.getMessage());
@@ -36,11 +36,10 @@ public class DatabaseInitializer {
     }
 
     private static void createTables(Connection conn) {
-        // SQL para crear la tabla 'registros_arduino'
-        // Almacenará el código hexadecimal (STRING) y la marca de tiempo.
+
         String sql = "CREATE TABLE IF NOT EXISTS registros_arduino (\n"
                    + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
-                   + " codigo_arduino TEXT NOT NULL,\n" // Aquí guardaremos el String del código
+                   + " codigo_arduino TEXT NOT NULL,\n" 
                    + " marca_tiempo TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n"
                    + ");";
 

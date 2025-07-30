@@ -3,7 +3,11 @@ package Arduino;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ArduinoDataDAO {
 
@@ -24,9 +28,35 @@ public class ArduinoDataDAO {
             System.out.println(" Código '" + linea + "' guardado en la BD.");
 
         } catch (SQLException e) {
-            System.err.println("❌ Error al guardar el código en la base de datos: " + e.getMessage());
+            System.err.println("X Error al guardar el código en la base de datos: " + e.getMessage());
         }
     }
+    /**
+     * Consulta la base de datos y devuelve el recuento de cada código registrado.
+     * @return Un mapa donde la clave es el código (String) y el valor es el número de veces que apareció (Integer).
+     */
+    public static Map<String, Integer> getCodigoCounts() {
+        Map<String, Integer> counts = new HashMap<>();
+        String sql = "SELECT codigo_arduino, COUNT(*) as count FROM registros_arduino GROUP BY codigo_arduino ORDER BY count DESC";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement(); 
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String codigo = rs.getString("codigo_arduino");
+                int count = rs.getInt("count");
+                counts.put(codigo, count);
+            }
+            System.out.println("Historial de códigos recuperado de la BD.");
+
+        } catch (SQLException e) {
+            System.err.println("X Error al obtener el recuento de códigos: " + e.getMessage());
+        }
+        return counts;
+    }
+
+
 
     /**
      * Método para conectar y obtener una conexión (útil si necesitas hacer más operaciones).

@@ -15,7 +15,7 @@ public class MenuComando extends JDialog {
         setLocationRelativeTo(getParent());
         setLayout(new BorderLayout());
 
-        // 🎨 Colores personalizados
+        // Colores 
         Color fondo = new Color(245, 240, 255);        // Lila claro
         Color azulPrimario = new Color(0, 191, 255);   // Azul celeste
         Color verdeControl = new Color(126, 217, 87);  // Verde lima
@@ -34,11 +34,10 @@ public class MenuComando extends JDialog {
         // Botón: Historial de comandos
         JButton historialBtn = crearBotonEstilizado("Historial de comandos", azulPrimario, textoOscuro);
         historialBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this,
-                    "Historial no disponible por ahora.",
-                    "Historial de Comandos",
-                    JOptionPane.INFORMATION_MESSAGE);
+            HistoryDialog historyDialog = new HistoryDialog(getParentFrame()); // <--- CAMBIO AQUÍ
+            historyDialog.setVisible(true);
         });
+
 
         // Botón: Simulador de Control
         // JButton simuladorBtn = crearBotonEstilizado("Simulador de Control", verdeControl, textoOscuro);
@@ -74,5 +73,9 @@ public class MenuComando extends JDialog {
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return boton;
     }
+
+     private JFrame getParentFrame() {
+        return (JFrame) SwingUtilities.getWindowAncestor(this)
+     ;}
 }
 

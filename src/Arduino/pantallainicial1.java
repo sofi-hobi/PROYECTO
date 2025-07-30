@@ -21,12 +21,12 @@ public class pantallainicial1 extends JPanel {
     public JLabel logoLabel;
 
     // Colores del tema
-    private final Color PRIMARY_COLOR = new Color(89, 187, 206);      // Azul elegante
+    private final Color PRIMARY_COLOR = new Color(103, 196, 211);      // Azul elegante
     private final Color SECONDARY_COLOR = new Color(43, 132, 192);    // Azul más claro
-    private final Color BACKGROUND_COLOR = new Color(215, 255, 255);  // Gris muy claro
+    private final Color BACKGROUND_COLOR = new Color(229, 255, 255);  // Gris muy claro
     private final Color TEXT_COLOR = new Color(44, 62, 80);           // Gris oscuro
-    private final Color BUTTON_HOVER = new Color(30, 115, 165);       // Azul más oscuro
-    private final Color SUCCESS_COLOR = new Color(150, 203, 114);       // Verde
+    private final Color BUTTON_HOVER = new Color(208, 240, 225);       // Azul más oscuro
+    private final Color SUCCESS_COLOR = new Color(185, 220, 114);       // Verde
     private final Color DANGER_COLOR = new Color(215,112, 100);        // Rojo
 
     public pantallainicial1() {
@@ -64,13 +64,13 @@ public class pantallainicial1 extends JPanel {
     JPanel panelTituloLogo = new JPanel(new BorderLayout());
     panelTituloLogo.setBackground(BACKGROUND_COLOR);
 
-    // Título centrado
-    titleLabel = new JLabel("Escuela Politécnica Nacional", SwingConstants.CENTER);
-    titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 32));
+
+    titleLabel = new JLabel("ESCUELA POLITECNICA NACIONAL", SwingConstants.CENTER);
+    titleLabel.setFont(new Font("Gill Sans Ultra Bold", Font.PLAIN, 20));
     titleLabel.setForeground(SECONDARY_COLOR);
     panelTituloLogo.add(titleLabel, BorderLayout.CENTER);
 
-    // Logo a la derecha
+
     logoLabel = new JLabel();
     logoLabel.setPreferredSize(new Dimension(100, 80));
     logoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -89,22 +89,18 @@ public class pantallainicial1 extends JPanel {
     panelTituloLogo.add(logoLabel, BorderLayout.EAST);
     topPanel.add(panelTituloLogo);
 
-    // Espacio vertical
-    topPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-    // Nombres centrados
+    topPanel.add(Box.createRigidArea(new Dimension(0, 16)));
+
+
     JLabel nombresLabel = new JLabel("<html><div style='text-align: center;'>"
-            + "Andres Galarraga<br>"
-            + "Sofia Churuchumbi<br>"
-            + "Kevin Calapi<br>"
-            + "Kevin Charanchi<br>"
-            + "Alan Carvajal<br>"
+            + "CUENTA CONMIGO<br>"
+            + "Proyecto de Apoyo Numérico Infantil<br>"
             + "</div></html>", SwingConstants.CENTER);
-    nombresLabel.setFont(new Font("Segoe UI Black", Font.BOLD, 25));
+    nombresLabel.setFont(new Font("Grande October Three", Font.BOLD, 40));
     nombresLabel.setForeground(PRIMARY_COLOR);
     nombresLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-    // Contenedor centrado para los nombres
     JPanel nombresPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     nombresPanel.setBackground(BACKGROUND_COLOR);
     nombresPanel.add(nombresLabel);
@@ -123,7 +119,7 @@ public class pantallainicial1 extends JPanel {
         // Panel contenedor principal con bordes redondeados
         JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
-        mainContentPanel.setBackground(Color.WHITE);
+        mainContentPanel.setBackground(BUTTON_HOVER);
         mainContentPanel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(189, 195, 199), 1),
             new EmptyBorder(40, 40, 40, 40)
@@ -131,7 +127,7 @@ public class pantallainicial1 extends JPanel {
 
         // Etiqueta de número con estilo mejorado
         etiquetaNumero = new JLabel("Número: No disponible", SwingConstants.CENTER);
-        etiquetaNumero.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        etiquetaNumero.setFont(new Font("Segoe UI", Font.BOLD, 16));
         etiquetaNumero.setForeground(TEXT_COLOR);
         etiquetaNumero.setAlignmentX(Component.CENTER_ALIGNMENT);
         etiquetaNumero.setBorder(new EmptyBorder(0, 0, 30, 0));
@@ -153,7 +149,7 @@ public class pantallainicial1 extends JPanel {
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setBackground(BUTTON_HOVER);
 
         // Botón Iniciar
         botonInicio = createStyledButton(" Iniciar Sistema", SUCCESS_COLOR);
@@ -180,7 +176,7 @@ public class pantallainicial1 extends JPanel {
     private JButton createStyledButton(String text, Color baseColor) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        button.setForeground(Color.WHITE);
+        button.setForeground(BUTTON_HOVER);
         button.setBackground(baseColor);
         button.setBorder(BorderFactory.createEmptyBorder(12, 25, 12, 25));
         button.setFocusPainted(false);
