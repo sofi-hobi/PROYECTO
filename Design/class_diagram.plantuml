@@ -1,372 +1,50 @@
 @startuml Diagrama_Clases_Arduino
 
-!theme plain
-skinparam linetype ortho
-skinparam class {
-    BackgroundColor #FAFAFA
-    BorderColor #2C3E50
-    BorderThickness 2
-    ArrowColor #34495E
-    ArrowThickness 2
-    AttributeFontColor #2C3E50
-    AttributeFontSize 11
-    MethodFontColor #2C3E50
-    MethodFontSize 11
-}
-skinparam package {
-    BackgroundColor #ECF0F1
-    BorderColor #3498DB
-    BorderThickness 2
-    FontColor #2C3E50
-    FontSize 14
-    FontStyle bold
-}
-skinparam stereotype {
-    ABackgroundColor #E8F8F5
-    CBorderColor #27AE60
+title Diagrama de Clases - Sistema Arduino IR
+
+class arduinoc {
+    +main(String[]) : void
 }
 
-title **Diagrama de Clases - Sistema de Control Arduino IR**
-
-package "🎛️ Interfaz Gráfica" as GUI {
-    
-    abstract class SwingComponent <<abstract>> {
-        #PRIMARY_COLOR: Color = #4A90E2
-        #SECONDARY_COLOR: Color = #52C0F5
-        #BACKGROUND_COLOR: Color = #F8F9FA
-        #TEXT_COLOR: Color = #2C3E50
-        #SUCCESS_COLOR: Color = #27AE60
-        #DANGER_COLOR: Color = #E74C3C
-        --
-        #createStyledComponent(): Component
-        #applyTheme(): void
-    }
-    
-    class pantallainicial1 <<Singleton>> {
-        ~frame2: Pantalla2
-        +botonInicio: JButton
-        +jButton1: JButton {Salir}
-        +jButton2: JButton {Menú}
-        +jPanel1: JPanel
-        +titleLabel: JLabel
-        +etiquetaNumero: JLabel
-        +logoLabel: JLabel
-        -PRIMARY_COLOR: Color = #59BBCE
-        -SECONDARY_COLOR: Color = #2B84C0
-        -BACKGROUND_COLOR: Color = #D7FFFF
-        -TEXT_COLOR: Color = #2C3E50
-        -BUTTON_HOVER: Color = #1E73A5
-        -SUCCESS_COLOR: Color = #96CB72
-        -DANGER_COLOR: Color = #D77064
-        --
-        +pantallainicial1()
-        -initComponents(): void
-        +getPantalla2(): Pantalla2
-        -createTopPanel(): JPanel
-        -createCenterPanel(): JPanel
-        -createButtonPanel(): JPanel
-        -createStyledButton(text: String, baseColor: Color): JButton
-        -createBottomPanel(): JPanel
-        -botonInicioActionPerformed(evt: ActionEvent): void
-        -jButton2ActionPerformed(evt: ActionEvent): void
-        +mostrarNumero(numero: String): void
-        +setLogo(rutaLogo: String): void
-        --
-        **Responsabilidades:**
-        • Interfaz principal con diseño avanzado
-        • Sistema de temas personalizables
-        • Navegación con efectos hover
-        • Gestión dinámica de imágenes
-        • Colores y estilos profesionales
-    }
-    
-    class Pantalla2 <<Display>> {
-        -titleLabel: JLabel
-        -instructionLabel: JLabel
-        -statusLabel: JLabel
-        -displayLabel: JLabel
-        -backButton: JButton
-        -keyDisplayPanel: JPanel
-        -PRIMARY_COLOR: Color = #2980B9
-        -SECONDARY_COLOR: Color = #3498DB
-        -BACKGROUND_COLOR: Color = #ECF0F1
-        -TEXT_COLOR: Color = #2C3E50
-        -SUCCESS_COLOR: Color = #27AE60
-        -ACCENT_COLOR: Color = #9B59B6
-        -CARD_COLOR: Color = #FFFFFF
-        --
-        +Pantalla2()
-        -initComponents(): void
-        -createTopPanel(): JPanel
-        -createCenterPanel(): JPanel
-        -createBottomPanel(): JPanel
-        +getBackButton(): JButton
-        -createStyledButton(text: String): JButton
-        +mostrarNumero(numero: String): void
-        -updateVisualFeedback(): void
-        -loadImageFromFile(numero: String): ImageIcon
-        --
-        **Responsabilidades:**
-        • Visualización de códigos IR con imágenes
-        • Feedback visual mejorado con efectos
-        • Animaciones de estado y transiciones
-        • Carga dinámica de recursos gráficos
-    }
-    
-    class MenuComando <<Modal>> {
-        -parentFrame: JFrame
-        -historialBtn: JButton
-        -cerrarBtn: JButton
-        -FONDO_COLOR: Color = #F5F0FF
-        -AZUL_PRIMARIO: Color = #00BFFF
-        -VERDE_CONTROL: Color = #7ED957
-        -ROJO_CERRAR: Color = #FF6B6B
-        -TEXTO_OSCURO: Color = #212121
-        --
-        +MenuComando(parentFrame: JFrame)
-        -initUI(): void
-        -crearBotonEstilizado(texto: String, fondo: Color, textoColor: Color): JButton
-        -mostrarHistorial(): void
-        --
-        **Responsabilidades:**
-        • Menú de opciones con diseño mejorado
-        • Acceso al historial de comandos
-        • Interfaz modal con efectos visuales
-    }
-}
-package "🔌 Controlador Principal" as Controller {
-    
-    class arduinoc <<Main Controller>> {
-        -{static}BAUD_RATE: int = 9600
-        -{static}DEFAULT_PORT: String = "COM12"
-        -nombrePuerto: String
-        -puerto: SerialPort
-        -pantalla: pantallainicial1
-        -pantalla2: Pantalla2
-        -buffer: StringBuilder
-        -isConnected: boolean
-        --
-        +{static}main(args: String[]): void
-        -inicializarSistema(): void
-        -buscarPuerto(): SerialPort
-        -configurarPuerto(): boolean
-        -establecerConexion(): boolean
-        -procesarCodigo(linea: String): void
-        -ejecutarAccion(codigo: String): void
-        -leerDatosSerial(): void
-        -cerrarConexion(): void
-        --
-        **21 Códigos IR Soportados:**
-        • 0x7: Bajar Volumen
-        • 0x15: Subir Volumen  
-        • 0x16-0x4A: Números 0-9
-        • 0x45-0x47: Control Canales
-        • 0x40,0x44,0x43: Reproducción
-        • 0x19: Iniciar Sistema
-        • 0xD: Menú Comandos
-        • 0x9: Salir
-    }
+class pantallainicial1 {
+    -frame2 : Pantalla2
+    +botonInicio : JButton
+    +etiquetaNumero : JLabel
+    +pantallainicial1()
+    +getPantalla2() : Pantalla2
+    +mostrarNumero(String) : void
 }
 
-package "💾 Persistencia de Datos" as Data {
-    
-    class ArduinoDataDAO <<DAO Pattern>> {
-        -{static}{final}DB_URL: String = "jdbc:sqlite:./datos_arduino.db"
-        -{static}{final}TABLE_NAME: String = "registros_arduino"
-        --
-        +{static}insertCodigo(linea: String): void
-        +{static}getAllRegistros(): List<String>
-        +{static}getRegistrosPorFecha(fecha: Date): List<String>
-        +{static}connect(): Connection
-        +{static}closeConnection(conn: Connection): void
-        +{static}executeQuery(sql: String): ResultSet
-        --
-        **Responsabilidades:**
-        • Gestión de base de datos SQLite
-        • Persistencia de códigos IR recibidos
-        • Consultas de historial con timestamps
-        • Patrón DAO para abstracción de datos
-        • Manejo seguro de conexiones
-    }
-    
-    class DatabaseInitializer <<Utility>> {
-        -{static}{final}DB_URL: String = "jdbc:sqlite:./datos_arduino.db"
-        -{static}{final}CREATE_TABLE_SQL: String
-        --
-        +{static}main(args: String[]): void
-        +{static}initializeDatabase(): void
-        -{static}createTables(conn: Connection): void
-        -{static}validateSchema(): boolean
-        --
-        **Esquema de Tabla registros_arduino:**
-        • id: INTEGER PRIMARY KEY AUTOINCREMENT
-        • codigo_arduino: TEXT NOT NULL  
-        • marca_tiempo: TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        --
-        **Responsabilidades:**
-        • Inicialización automática de BD
-        • Creación de esquema de tablas
-        • Validación de estructura existente
-    }
+class Pantalla2 {
+    -displayLabel : JLabel
+    -keyDisplayPanel : JPanel
+    +Pantalla2()
+    +mostrarNumero(String) : void
 }
 
-package "📡 Comunicación Serial" as Serial {
-    
-    enum CodigoIR <<enumeration>> {
-        +BAJAR_VOLUMEN("0x7")
-        +SUBIR_VOLUMEN("0x15")
-        +NUMERO_0("0x16")
-        +NUMERO_1("0xC")
-        +NUMERO_2("0x18")
-        +NUMERO_3("0x5E")
-        +NUMERO_4("0x8")
-        +NUMERO_5("0x1C")
-        +NUMERO_6("0x5A")
-        +NUMERO_7("0x42")
-        +NUMERO_8("0x52")
-        +NUMERO_9("0x4A")
-        +CANAL_ANTERIOR("0x45")
-        +CANAL_ACTUAL("0x46")
-        +CANAL_PROXIMO("0x47")
-        +AVANZAR("0x40")
-        +RETROCEDER("0x44")
-        +SALTAR("0x43")
-        +INICIAR_SISTEMA("0x19")
-        +MENU_COMANDOS("0xD")
-        +SALIR("0x9")
-        --
-        -{final}codigo: String
-        --
-        -CodigoIR(codigo: String)
-        +getCodigo(): String
-        +{static}fromString(codigo: String): CodigoIR
-        +getDescripcion(): String
-    }
+class MenuComando {
+    +MenuComando(JFrame)
 }
 
-package "🔧 Librerías Externas" as External {
-    
-    class SerialPort <<External Library>> {
-        +{static}getCommPorts(): SerialPort[]
-        +getSystemPortName(): String
-        +setBaudRate(baudRate: int): void
-        +openPort(): boolean
-        +closePort(): void
-        +getInputStream(): InputStream
-        +isOpen(): boolean
-    }
-    
-    interface Connection <<JDBC>> {
-        +createStatement(): Statement
-        +prepareStatement(sql: String): PreparedStatement
-        +close(): void
-        +isClosed(): boolean
-    }
-    
-    class PreparedStatement <<JDBC>> {
-        +setString(index: int, value: String): void
-        +executeUpdate(): int
-        +executeQuery(): ResultSet
-    }
-    
-    class ImageIO <<Java IO>> {
-        +{static}read(file: File): BufferedImage
-    }
-    
-    class Timer <<Swing Timer>> {
-        +Timer(delay: int, listener: ActionListener)
-        +start(): void
-        +setRepeats(repeats: boolean): void
-    }
-}
-package "🎨 Framework Swing" as Swing {
-    
-    abstract class JPanel <<Swing Component>> {
-        +add(component: Component): void
-        +setLayout(layout: LayoutManager): void
-        +setBackground(color: Color): void
-    }
-    
-    class JButton <<Swing Component>> {
-        +setText(text: String): void
-        +addActionListener(listener: ActionListener): void
-        +doClick(): void
-    }
-    
-    class JLabel <<Swing Component>> {
-        +setText(text: String): void
-        +setIcon(icon: Icon): void
-    }
-    
-    class JFrame <<Swing Component>> {
-        +setVisible(visible: boolean): void
-        +pack(): void
-        +dispose(): void
-    }
-    
-    abstract class JDialog <<Swing Component>> {
-        +setModal(modal: boolean): void
-        +setLocationRelativeTo(component: Component): void
-    }
+class HistoryDialog {
+    +HistoryDialog(JFrame)
 }
 
-' ===== RELACIONES DE HERENCIA =====
-SwingComponent <|-- pantallainicial1 : extends
-SwingComponent <|-- Pantalla2 : extends
-pantallainicial1 --|> JPanel : extends
-Pantalla2 --|> JPanel : extends  
-MenuComando --|> JDialog : extends
+class DatabaseInitializer {
+    +initializeDatabase() : void
+}
 
-' ===== RELACIONES DE COMPOSICIÓN =====
-arduinoc *--> pantallainicial1 : "1\ncontiene"
-arduinoc *--> Pantalla2 : "1\ncontiene"
-pantallainicial1 *--> Pantalla2 : "1\nframe2"
-
-' ===== RELACIONES DE AGREGACIÓN =====
-pantallainicial1 o--> JButton : "3\nbotones"
-pantallainicial1 o--> JLabel : "3\nlabels"
-Pantalla2 o--> JLabel : "4\nlabels"
-Pantalla2 o--> JButton : "1\nbackButton"
-Pantalla2 o--> JPanel : "1\nkeyDisplayPanel"
-
-' ===== RELACIONES DE USO/DEPENDENCIA =====
-arduinoc ..> SerialPort : <<uses>>
-arduinoc ..> ArduinoDataDAO : <<calls>>
-arduinoc ..> CodigoIR : <<interprets>>
-ArduinoDataDAO ..> Connection : <<uses>>
-ArduinoDataDAO ..> PreparedStatement : <<uses>>
-DatabaseInitializer ..> Connection : <<creates>>
-pantallainicial1 ..> MenuComando : <<creates>>
-Pantalla2 ..> ImageIO : <<uses>>
-Pantalla2 ..> Timer : <<uses>>
-
-' ===== RELACIONES ESPECIALES =====
-CodigoIR --> arduinoc : <<triggers actions>>
-DatabaseInitializer --> ArduinoDataDAO : <<initializes for>>
-
-' ===== NOTAS EXPLICATIVAS =====
-note top of arduinoc : "**CONTROLADOR PRINCIPAL**\n• Punto de entrada del sistema\n• Gestiona comunicación serial COM12\n• Procesa 21 códigos IR diferentes\n• Coordina GUI mejorada y persistencia\n• Implementa efectos visuales"
-
-note right of ArduinoDataDAO : "**PATRÓN DAO**\n• Abstrae acceso a SQLite\n• Operaciones CRUD\n• Manejo de conexiones\n• Logging de actividad"
-
-note left of pantallainicial1 : "**PANTALLA PRINCIPAL MEJORADA**\n• Interfaz de usuario con diseño avanzado\n• Sistema de temas personalizables\n• Navegación con efectos hover\n• Gestión dinámica de imágenes\n• Colores y estilos profesionales"
-
-note bottom of Pantalla2 : "**DISPLAY DE CÓDIGOS MEJORADO**\n• Visualización con imágenes dinámicas\n• Animaciones y efectos visuales\n• Feedback inmediato con colores\n• Timer para transiciones suaves\n• Carga de imagenes_numeros/*.png"
-
-note right of CodigoIR : "**21 CÓDIGOS IR SOPORTADOS**\n• Control de volumen (2)\n• Dígitos numéricos (10)\n• Navegación canales (3)\n• Control reproducción (3)\n• Comandos sistema (3)\n• Total: 21 comandos únicos"
-
-note left of DatabaseInitializer : "**INICIALIZADOR BD**\n• Creación automática de esquema\n• Validación de estructura\n• Migración de datos\n• Configuración inicial"
-
-' ===== LEYENDA DE MODIFICADORES DE VISIBILIDAD =====
-legend top left
-  **Modificadores de Visibilidad:**
-  **+** Público (public)
-  **-** Privado (private) 
-  **#** Protegido (protected)
-  **~** Paquete (package-private)
-  **{static}** Método/Atributo estático
-  **{final}** Constante/Método final
-  **{abstract}** Clase/Método abstracto
-end legend
+class ArduinoDataDAO {
+    +insertCodigo(String) : void
+    +getCodigoCounts() : Map<String, Integer>
+}
+' Relaciones entre clases
+arduinoc --> pantallainicial1
+arduinoc --> DatabaseInitializer
+arduinoc --> ArduinoDataDAO
+pantallainicial1 *--> Pantalla2
+pantallainicial1 --> MenuComando
+MenuComando --> HistoryDialog
+HistoryDialog --> ArduinoDataDAO
 
 @enduml
